@@ -104,6 +104,8 @@
  *	in /proc for a task before it execs a suid executable.
  */
 
+extern int sch_alg;
+
 struct pid_entry {
 	const char *name;
 	int len;
@@ -505,11 +507,19 @@ static int proc_pid_schedstat(struct seq_file *m, struct pid_namespace *ns,
 {
 	if (unlikely(!sched_info_on()))
 		seq_printf(m, "0 0 0\n");
-	else
-		seq_printf(m, "%llu %llu %lu\n",
-		   (unsigned long long)task->se.sum_exec_runtime,
-		   (unsigned long long)task->sched_info.run_delay,
-		   task->sched_info.pcount);
+	else {
+		if (sch_alg == 0) {
+			seq_printf(m, "%llu %llu %lu\n",
+			(unsigned long long)task->se.sum_exec_runtime,
+			(unsigned long long)task->sched_info.run_delay,
+			task->sched_info.pcount);
+		} else {
+			seq_printf(m, "%llu %llu %lu\n",
+			(unsigned long long)tsk_seruntime(task),
+			(unsigned long long)task->sched_info.run_delay,
+			task->sched_info.pcount);
+		}
+	}
 
 	return 0;
 }
