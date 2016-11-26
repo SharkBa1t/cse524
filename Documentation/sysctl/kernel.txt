@@ -38,6 +38,7 @@ show up in /proc/sys/kernel:
 - hung_task_timeout_secs
 - hung_task_warnings
 - kexec_load_disabled
+- iso_cpu
 - kptr_restrict
 - kstack_depth_to_print       [ X86 only ]
 - l2cr                        [ PPC only ]
@@ -66,6 +67,7 @@ show up in /proc/sys/kernel:
 - randomize_va_space
 - real-root-dev               ==> Documentation/initrd.txt
 - reboot-cmd                  [ SPARC only ]
+- rr_interval
 - rtsig-max
 - rtsig-nr
 - sem
