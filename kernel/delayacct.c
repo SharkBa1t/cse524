@@ -21,6 +21,7 @@
 #include <linux/delayacct.h>
 #include <linux/module.h>
 
+extern int sch_alg;
 int delayacct_on __read_mostly = 1;	/* Delay accounting turned on/off */
 EXPORT_SYMBOL_GPL(delayacct_on);
 struct kmem_cache *delayacct_cache;
@@ -104,7 +105,10 @@ int __delayacct_add_tsk(struct taskstats *d, struct task_struct *tsk)
 	 */
 	t1 = tsk->sched_info.pcount;
 	t2 = tsk->sched_info.run_delay;
-	t3 = tsk->se.sum_exec_runtime;
+	if (sch_alg == 0)
+		t3 = tsk->se.sum_exec_runtime;
+	else if (sch_alg == 1)
+		t3 = tsk_seruntime(tsk);
 
 	d->cpu_count += t1;
 
